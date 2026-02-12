@@ -19,7 +19,7 @@ const LogoLoader = () => (
       </div>
     </div>
     <div className="mt-24 text-center">
-      <h2 className="text-3xl font-black text-white tracking-[0.4em] uppercase italic">
+      <h2 className="text-3xl font-black text-white tracking-[0.4em] uppercase italic px-4">
         SOCIAL HUB <span className="text-neonCyan">X</span>
       </h2>
       <p className="text-gray-500 text-[9px] mt-6 font-black uppercase tracking-[0.6em] animate-pulse">Establishing Secure Node Link...</p>
@@ -27,41 +27,70 @@ const LogoLoader = () => (
   </div>
 );
 
+const BottomNav = ({ currentView, setView }: { currentView: View, setView: (view: View) => void }) => {
+  const navItems = [
+    { id: 'dashboard', icon: 'fa-house', label: 'Home' },
+    { id: 'new-order', icon: 'fa-cart-plus', label: 'Order' },
+    { id: 'services', icon: 'fa-list-ul', label: 'Service' },
+    { id: 'add-funds', icon: 'fa-wallet', label: 'Funds' },
+    { id: 'profile', icon: 'fa-user', label: 'Profile' },
+  ];
+
+  return (
+    <div className="lg:hidden fixed bottom-0 left-0 w-full z-50 bg-charcoal/80 backdrop-blur-xl border-t border-white/10 px-2 pb-safe">
+      <div className="flex items-center justify-around h-16">
+        {navItems.map((item) => (
+          <button
+            key={item.id}
+            onClick={() => setView(item.id as View)}
+            className={`flex flex-col items-center justify-center w-full h-full space-y-1 transition-colors ${
+              currentView === item.id ? 'text-neonCyan' : 'text-gray-500'
+            }`}
+          >
+            <i className={`fa-solid ${item.icon} text-lg`}></i>
+            <span className="text-[10px] font-black uppercase tracking-tighter">{item.label}</span>
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+};
+
 const LandingPage = ({ onNav }: { onNav: (mode: 'login' | 'signup') => void }) => (
-  <div className="w-full bg-charcoal selection:bg-neonCyan/30">
-    <nav className="fixed top-0 left-0 w-full z-50 bg-charcoal/20 backdrop-blur-xl border-b border-white/5 px-6 py-4 flex items-center justify-between">
+  <div className="w-full bg-charcoal selection:bg-neonCyan/30 overflow-x-hidden">
+    <nav className="fixed top-0 left-0 w-full z-50 bg-charcoal/20 backdrop-blur-xl border-b border-white/5 px-4 md:px-6 py-4 flex items-center justify-between">
       <div className="flex items-center space-x-3">
         {LOGO_SVG}
-        <h1 className="text-xl font-black text-white uppercase italic tracking-tighter">
+        <h1 className="text-lg md:text-xl font-black text-white uppercase italic tracking-tighter">
           SOCIAL HUB <span className="text-neonCyan">X</span>
         </h1>
       </div>
-      <div className="flex items-center space-x-4">
-        <button onClick={() => onNav('login')} className="text-sm font-bold text-gray-400 hover:text-white uppercase transition-colors">Login</button>
-        <button onClick={() => onNav('signup')} className="px-6 py-2.5 bg-neonCyan text-charcoal font-black rounded-xl text-sm uppercase italic shadow-glow-cyan hover:scale-105 transition-all">Signup</button>
+      <div className="flex items-center space-x-2 md:space-x-4">
+        <button onClick={() => onNav('login')} className="text-xs md:text-sm font-bold text-gray-400 hover:text-white uppercase transition-colors px-2">Login</button>
+        <button onClick={() => onNav('signup')} className="px-4 md:px-6 py-2 bg-neonCyan text-charcoal font-black rounded-xl text-xs md:text-sm uppercase italic shadow-glow-cyan hover:scale-105 transition-all">Signup</button>
       </div>
     </nav>
 
-    <section className="relative min-h-screen pt-40 pb-20 px-6 flex flex-col items-center justify-center overflow-hidden">
-      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-neonCyan/10 blur-[120px] rounded-full -z-10"></div>
-      <div className="max-w-4xl text-center space-y-10 animate-in fade-in slide-in-from-bottom-10 duration-1000">
-        <div className="inline-block px-4 py-1.5 rounded-full bg-white/5 border border-white/10 text-[10px] font-black text-neonCyan uppercase tracking-[0.3em] mb-4">
+    <section className="relative min-h-screen pt-32 pb-20 px-6 flex flex-col items-center justify-center overflow-hidden">
+      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-full max-w-[800px] h-[400px] bg-neonCyan/10 blur-[120px] rounded-full -z-10"></div>
+      <div className="max-w-4xl text-center space-y-8 md:space-y-10 animate-in fade-in slide-in-from-bottom-10 duration-1000">
+        <div className="inline-block px-4 py-1.5 rounded-full bg-white/5 border border-white/10 text-[9px] md:text-[10px] font-black text-neonCyan uppercase tracking-[0.2em] md:tracking-[0.3em] mb-4">
           The World's Fastest SMM Panel
         </div>
-        <h1 className="text-5xl md:text-8xl font-black text-white italic leading-[1.1] uppercase tracking-tighter">
-          Dominate Social <br />
+        <h1 className="text-4xl md:text-8xl font-black text-white italic leading-[1.1] uppercase tracking-tighter">
+          Dominate Social <br className="hidden md:block" />
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-neonCyan to-electricBlue">Presence Instantly</span>
         </h1>
-        <p className="text-gray-400 text-lg md:text-xl font-medium max-w-2xl mx-auto leading-relaxed">
+        <p className="text-gray-400 text-base md:text-xl font-medium max-w-2xl mx-auto leading-relaxed">
           Unlock high-speed growth for Facebook, Instagram, YouTube, and TikTok. Real users, instant delivery, and the lowest prices in Bangladesh.
         </p>
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
-          <button onClick={() => onNav('signup')} className="w-full sm:w-auto px-12 py-6 bg-neonCyan text-charcoal font-black rounded-2xl text-lg uppercase italic shadow-glow-cyan hover:scale-110 transition-all">Signup</button>
-          <button onClick={() => onNav('login')} className="w-full sm:w-auto px-12 py-6 bg-white/5 border border-white/10 text-white font-black rounded-2xl text-lg uppercase tracking-widest hover:bg-white/10 transition-all italic">Login</button>
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 md:gap-6">
+          <button onClick={() => onNav('signup')} className="w-full sm:w-auto px-10 md:px-12 py-5 md:py-6 bg-neonCyan text-charcoal font-black rounded-2xl text-base md:text-lg uppercase italic shadow-glow-cyan hover:scale-110 transition-all">Signup</button>
+          <button onClick={() => onNav('login')} className="w-full sm:w-auto px-10 md:px-12 py-5 md:py-6 bg-white/5 border border-white/10 text-white font-black rounded-2xl text-base md:text-lg uppercase tracking-widest hover:bg-white/10 transition-all italic">Login</button>
         </div>
       </div>
       
-      <div className="mt-32 w-full max-w-6xl grid grid-cols-2 md:grid-cols-4 gap-8 px-6 animate-in fade-in duration-1000 delay-500">
+      <div className="mt-20 md:mt-32 w-full max-w-6xl grid grid-cols-2 md:grid-cols-4 gap-8 px-6 animate-in fade-in duration-1000 delay-500">
         {[
           { label: 'Total Orders', val: '2.4M+' },
           { label: 'Active Users', val: '12K+' },
@@ -69,8 +98,8 @@ const LandingPage = ({ onNav }: { onNav: (mode: 'login' | 'signup') => void }) =
           { label: 'Uptime', val: '99.9%' }
         ].map((stat, i) => (
           <div key={i} className="text-center space-y-2">
-            <h4 className="text-3xl md:text-4xl font-black text-white italic">{stat.val}</h4>
-            <p className="text-[10px] text-gray-500 uppercase font-black tracking-widest">{stat.label}</p>
+            <h4 className="text-2xl md:text-4xl font-black text-white italic">{stat.val}</h4>
+            <p className="text-[9px] md:text-[10px] text-gray-500 uppercase font-black tracking-widest">{stat.label}</p>
           </div>
         ))}
       </div>
@@ -88,42 +117,42 @@ const LandingPage = ({ onNav }: { onNav: (mode: 'login' | 'signup') => void }) =
 
 const BroadcastModal = ({ broadcast, onClose }: { broadcast: BroadcastNotification; onClose: () => void }) => {
   return (
-    <div className="fixed inset-0 z-[200] flex items-center justify-center p-6 animate-in fade-in duration-300">
+    <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 md:p-6 animate-in fade-in duration-300">
       <div className="absolute inset-0 bg-charcoal/80 backdrop-blur-md" onClick={onClose}></div>
       <div className="relative w-full max-w-lg glass-panel overflow-hidden border border-neonCyan/20 animate-in zoom-in-95 duration-300 shadow-glow-cyan">
         <div className="absolute top-0 left-0 w-full h-1 bg-neonCyan"></div>
         {broadcast.image_url && (
-          <div className="w-full h-64 overflow-hidden">
+          <div className="w-full h-48 md:h-64 overflow-hidden">
             <img src={broadcast.image_url} alt="Broadcast" className="w-full h-full object-cover" />
           </div>
         )}
-        <div className="p-8 space-y-6 text-center">
-          <h3 className="text-3xl font-black text-white italic uppercase tracking-tighter">{broadcast.title}</h3>
-          <p className="text-gray-400 font-medium leading-relaxed whitespace-pre-wrap">{broadcast.message}</p>
-          <div className="flex flex-col gap-4">
+        <div className="p-6 md:p-8 space-y-6 text-center">
+          <h3 className="text-2xl md:text-3xl font-black text-white italic uppercase tracking-tighter">{broadcast.title}</h3>
+          <p className="text-gray-400 text-sm md:text-base font-medium leading-relaxed whitespace-pre-wrap">{broadcast.message}</p>
+          <div className="flex flex-col gap-3">
             {broadcast.redirect_link && (
               <a 
                 href={broadcast.redirect_link} 
                 target="_blank" 
                 rel="noopener noreferrer"
-                className="w-full py-4 bg-neonCyan text-charcoal font-black rounded-xl uppercase italic shadow-glow-cyan hover:scale-105 transition-all text-center"
+                className="w-full py-4 bg-neonCyan text-charcoal font-black rounded-xl uppercase italic shadow-glow-cyan hover:scale-105 transition-all text-center text-sm"
               >
                 Action Now
               </a>
             )}
-            <div className="flex gap-4">
+            <div className="flex gap-3">
               <button 
                 onClick={() => {
                   localStorage.setItem(`SHX_BROADCAST_DISMISSED_${broadcast.id}`, 'true');
                   onClose();
                 }}
-                className="flex-1 py-3 text-xs font-black text-gray-500 uppercase tracking-widest hover:text-white border border-white/5 rounded-xl hover:bg-white/5"
+                className="flex-1 py-3 text-[10px] font-black text-gray-500 uppercase tracking-widest hover:text-white border border-white/5 rounded-xl hover:bg-white/5"
               >
-                Don't show again
+                Dismiss
               </button>
               <button 
                 onClick={onClose}
-                className="flex-1 py-3 text-xs font-black text-white uppercase tracking-widest border border-white/10 rounded-xl hover:bg-white/10"
+                className="flex-1 py-3 text-[10px] font-black text-white uppercase tracking-widest border border-white/10 rounded-xl hover:bg-white/10"
               >
                 Close
               </button>
@@ -693,29 +722,29 @@ const App: React.FC = () => {
             <h2 className="text-4xl font-black text-white italic uppercase mt-6 tracking-tighter">SOCIAL HUB <span className="text-neonCyan">X</span></h2>
           </div>
         </div>
-        <div className="w-full lg:w-1/2 flex items-center justify-center p-8 bg-charcoal">
-          <div className="w-full max-w-md space-y-10 animate-in slide-in-from-right-12 duration-700">
-            <h2 className="text-5xl font-black text-white italic uppercase tracking-tighter">
+        <div className="w-full lg:w-1/2 flex items-center justify-center p-6 md:p-8 bg-charcoal">
+          <div className="w-full max-w-md space-y-8 md:space-y-10 animate-in slide-in-from-right-12 duration-700">
+            <h2 className="text-4xl md:text-5xl font-black text-white italic uppercase tracking-tighter">
               {authMode === 'login' ? 'Login' : 'Registration'}
             </h2>
-            <form onSubmit={handleAuthSubmit} className="space-y-6">
+            <form onSubmit={handleAuthSubmit} className="space-y-4 md:space-y-6">
               {authMode === 'signup' && (
                 <>
-                  <input type="text" required value={formData.username} onChange={(e) => setFormData({...formData, username: e.target.value})} className="w-full bg-white/5 border border-white/10 rounded-2xl p-5 text-white font-bold placeholder-gray-600 focus:border-neonCyan outline-none" placeholder="FULL NAME / USERNAME" />
+                  <input type="text" required value={formData.username} onChange={(e) => setFormData({...formData, username: e.target.value})} className="w-full bg-white/5 border border-white/10 rounded-2xl p-4 md:p-5 text-white font-bold placeholder-gray-600 focus:border-neonCyan outline-none" placeholder="FULL NAME / USERNAME" />
                   <div className="relative">
-                    <input type="text" value={formData.inviteCode} onChange={(e) => setFormData({...formData, inviteCode: e.target.value})} className="w-full bg-white/5 border border-neonCyan/20 rounded-2xl p-5 text-neonCyan font-bold placeholder-neonCyan/30 focus:border-neonCyan outline-none tracking-widest" placeholder="INVITATION CODE" />
+                    <input type="text" value={formData.inviteCode} onChange={(e) => setFormData({...formData, inviteCode: e.target.value})} className="w-full bg-white/5 border border-neonCyan/20 rounded-2xl p-4 md:p-5 text-neonCyan font-bold placeholder-neonCyan/30 focus:border-neonCyan outline-none tracking-widest" placeholder="INVITATION CODE" />
                     <i className="fa-solid fa-hashtag absolute right-6 top-1/2 -translate-y-1/2 text-neonCyan/30"></i>
                   </div>
                 </>
               )}
-              <input type="text" required value={authMode === 'signup' ? formData.email : formData.loginIdentifier} onChange={(e) => authMode === 'signup' ? setFormData({...formData, email: e.target.value}) : setFormData({...formData, loginIdentifier: e.target.value})} className="w-full bg-white/5 border border-white/10 rounded-2xl p-5 text-white font-bold placeholder-gray-600 focus:border-neonCyan outline-none" placeholder="EMAIL ADDRESS" />
-              <input type="password" required value={formData.password} onChange={(e) => setFormData({...formData, password: e.target.value})} className="w-full bg-white/5 border border-white/10 rounded-2xl p-5 text-white font-bold placeholder-gray-600 focus:border-neonCyan outline-none" placeholder="SECURE PASSWORD" />
+              <input type="text" required value={authMode === 'signup' ? formData.email : formData.loginIdentifier} onChange={(e) => authMode === 'signup' ? setFormData({...formData, email: e.target.value}) : setFormData({...formData, loginIdentifier: e.target.value})} className="w-full bg-white/5 border border-white/10 rounded-2xl p-4 md:p-5 text-white font-bold placeholder-gray-600 focus:border-neonCyan outline-none" placeholder="EMAIL ADDRESS" />
+              <input type="password" required value={formData.password} onChange={(e) => setFormData({...formData, password: e.target.value})} className="w-full bg-white/5 border border-white/10 rounded-2xl p-4 md:p-5 text-white font-bold placeholder-gray-600 focus:border-neonCyan outline-none" placeholder="SECURE PASSWORD" />
               {authError && <div className="text-red-500 text-[10px] font-black uppercase text-center bg-red-500/10 p-4 rounded-xl border border-red-500/20">{authError}</div>}
-              <button type="submit" className="w-full bg-neonCyan text-charcoal font-black py-6 rounded-2xl uppercase shadow-glow-cyan italic tracking-widest text-lg hover:scale-[1.02] transition-transform">
+              <button type="submit" className="w-full bg-neonCyan text-charcoal font-black py-5 md:py-6 rounded-2xl uppercase shadow-glow-cyan italic tracking-widest text-base md:text-lg hover:scale-[1.02] transition-transform">
                 {authMode === 'login' ? 'Login' : 'Signup'}
               </button>
             </form>
-            <button onClick={() => setAuthMode(authMode === 'login' ? 'signup' : 'login')} className="w-full text-xs font-black text-gray-600 uppercase hover:text-white transition-colors">{authMode === 'login' ? "Register New Account?" : "Already Have An Account?"}</button>
+            <button onClick={() => setAuthMode(authMode === 'login' ? 'signup' : 'login')} className="w-full text-[10px] md:text-xs font-black text-gray-600 uppercase hover:text-white transition-colors">{authMode === 'login' ? "Register New Account?" : "Already Have An Account?"}</button>
           </div>
         </div>
       </div>
@@ -724,15 +753,15 @@ const App: React.FC = () => {
     switch (currentView) {
       case 'dashboard':
       case 'admin-dashboard': return (
-        <div className="space-y-10 animate-in fade-in duration-1000">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+        <div className="space-y-6 md:space-y-10 animate-in fade-in duration-1000 pb-20 lg:pb-0">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
             <StatCard label={user?.role === 'admin' ? "Total Agents" : "Balance"} value={user?.role === 'admin' ? adminMetrics.totalUsers : `৳${user?.balance?.toLocaleString()}`} icon="fa-users" color="neonCyan" />
             <StatCard label={user?.role === 'admin' ? "Global Orders" : "Spent"} value={user?.role === 'admin' ? adminMetrics.totalOrders : `৳${user?.totalSpent?.toLocaleString()}`} icon="fa-box" color="green-500" />
             <StatCard label={user?.role === 'admin' ? "Total Yield" : "Passive Earn"} value={user?.role === 'admin' ? `৳${adminMetrics.totalRevenue.toLocaleString()}` : `৳${user?.referral_earnings?.toLocaleString() || '0'}`} icon="fa-chart-line" color="orange-400" />
             <StatCard label={user?.role === 'admin' ? "Pending Syncs" : "Sub-Nodes"} value={user?.role === 'admin' ? adminMetrics.pendingSyncs : referralCount} icon="fa-network-wired" color="red-500" />
           </div>
-          <div className="glass-panel p-8 h-96">
-            <h3 className="text-xl font-black text-white italic uppercase tracking-tighter mb-8">System Pulse Analytics</h3>
+          <div className="glass-panel p-6 md:p-8 h-80 md:h-96">
+            <h3 className="text-base md:text-xl font-black text-white italic uppercase tracking-tighter mb-6 md:mb-8">System Pulse Analytics</h3>
             <ResponsiveContainer width="100%" height="100%">
               <AreaChart data={[ { name: '00', val: 400 }, { name: '04', val: 300 }, { name: '08', val: 500 }, { name: '12', val: 800 }, { name: '16', val: 450 }, { name: '20', val: 900 }, { name: '24', val: 340 } ]}>
                 <Tooltip contentStyle={{ backgroundColor: '#0b0e11', border: 'none', borderRadius: '12px', fontSize: '10px' }} />
@@ -744,45 +773,47 @@ const App: React.FC = () => {
       );
 
       case 'new-order': return (
-        <div className="max-w-4xl mx-auto animate-in fade-in duration-700">
-          <div className="glass-panel p-10 border-white/10 relative overflow-hidden">
+        <div className="max-w-4xl mx-auto animate-in fade-in duration-700 pb-20 lg:pb-0">
+          <div className="glass-panel p-6 md:p-10 border-white/10 relative overflow-hidden">
             <div className="absolute top-0 left-0 w-full h-1 bg-neonCyan"></div>
-            <h3 className="text-3xl font-black text-white italic uppercase mb-10"><i className="fa-solid fa-cart-plus text-neonCyan mr-4"></i> Create Mission</h3>
-            <div className="grid md:grid-cols-2 gap-10">
-              <div className="space-y-6">
+            <h3 className="text-2xl md:text-3xl font-black text-white italic uppercase mb-6 md:mb-10 flex items-center">
+              <i className="fa-solid fa-cart-plus text-neonCyan mr-4"></i> Create Mission
+            </h3>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-10">
+              <div className="space-y-4 md:space-y-6">
                 <div className="space-y-2">
-                  <label className="text-[10px] text-gray-500 font-black uppercase">Segment</label>
-                  <select value={orderCategory} onChange={(e) => { setOrderCategory(e.target.value); }} className="w-full bg-charcoal border border-white/10 rounded-xl p-4 text-white font-bold appearance-none uppercase outline-none">
+                  <label className="text-[9px] md:text-[10px] text-gray-500 font-black uppercase tracking-widest">Segment</label>
+                  <select value={orderCategory} onChange={(e) => { setOrderCategory(e.target.value); }} className="w-full bg-charcoal border border-white/10 rounded-xl p-3 md:p-4 text-white font-bold appearance-none uppercase outline-none focus:border-neonCyan">
                     {categories.map(cat => <option key={cat} value={cat}>{cat}</option>)}
                   </select>
                 </div>
                 <div className="space-y-2">
-                  <label className="text-[10px] text-gray-500 font-black uppercase">Asset</label>
-                  <select value={orderServiceId} onChange={(e) => setOrderServiceId(Number(e.target.value))} className="w-full bg-charcoal border border-white/10 rounded-xl p-4 text-white font-bold appearance-none uppercase outline-none">
+                  <label className="text-[9px] md:text-[10px] text-gray-500 font-black uppercase tracking-widest">Asset</label>
+                  <select value={orderServiceId} onChange={(e) => setOrderServiceId(Number(e.target.value))} className="w-full bg-charcoal border border-white/10 rounded-xl p-3 md:p-4 text-white font-bold appearance-none uppercase outline-none focus:border-neonCyan">
                     {servicesForCategory.map(svc => <option key={svc.id} value={svc.id}>{svc.name} - ৳{svc.ratePer1000}/1K</option>)}
                   </select>
                 </div>
                 <div className="space-y-2">
-                  <label className="text-[10px] text-gray-500 font-black uppercase">Target Link</label>
-                  <input type="url" placeholder="URL node..." value={orderLink} onChange={(e) => setOrderLink(e.target.value)} className="w-full bg-charcoal border border-white/10 rounded-xl p-4 text-white font-bold outline-none" />
+                  <label className="text-[9px] md:text-[10px] text-gray-500 font-black uppercase tracking-widest">Target Link</label>
+                  <input type="url" placeholder="URL node..." value={orderLink} onChange={(e) => setOrderLink(e.target.value)} className="w-full bg-charcoal border border-white/10 rounded-xl p-3 md:p-4 text-white font-bold outline-none focus:border-neonCyan" />
                 </div>
                 <div className="space-y-2">
-                  <label className="text-[10px] text-gray-500 font-black uppercase">Volume</label>
-                  <input type="number" placeholder="Quantity" value={orderQuantity || ''} onChange={(e) => setOrderQuantity(Number(e.target.value))} className="w-full bg-charcoal border border-white/10 rounded-xl p-5 text-white font-black text-xl outline-none" />
+                  <label className="text-[9px] md:text-[10px] text-gray-500 font-black uppercase tracking-widest">Volume</label>
+                  <input type="number" placeholder="Quantity" value={orderQuantity || ''} onChange={(e) => setOrderQuantity(Number(e.target.value))} className="w-full bg-charcoal border border-white/10 rounded-xl p-4 md:p-5 text-white font-black text-xl md:text-2xl outline-none focus:border-neonCyan" />
                 </div>
               </div>
-              <div className="p-8 bg-neonCyan/5 border border-neonCyan/10 rounded-2xl flex flex-col justify-between">
+              <div className="p-6 md:p-8 bg-neonCyan/5 border border-neonCyan/10 rounded-2xl flex flex-col justify-between">
                 <div>
-                  <h4 className="text-[10px] text-neonCyan font-black uppercase mb-6 tracking-widest">Mission Specs</h4>
-                  <div className="space-y-4">
-                    <p className="text-xs text-gray-400 font-bold uppercase">Time: <span className="text-white ml-2">{activeOrderService?.avgTime || 'Instant'}</span></p>
-                    <p className="text-xs text-gray-400 font-bold uppercase">Range: <span className="text-white ml-2">{activeOrderService?.min?.toLocaleString()} - {activeOrderService?.max?.toLocaleString()}</span></p>
+                  <h4 className="text-[9px] md:text-[10px] text-neonCyan font-black uppercase mb-4 md:mb-6 tracking-widest">Mission Specs</h4>
+                  <div className="space-y-3 md:space-y-4">
+                    <p className="text-[10px] md:text-xs text-gray-400 font-bold uppercase">Time: <span className="text-white ml-2">{activeOrderService?.avgTime || 'Instant'}</span></p>
+                    <p className="text-[10px] md:text-xs text-gray-400 font-bold uppercase">Range: <span className="text-white ml-2">{activeOrderService?.min?.toLocaleString()} - {activeOrderService?.max?.toLocaleString()}</span></p>
                   </div>
                 </div>
-                <div className="pt-10 border-t border-white/5">
-                  <p className="text-[10px] text-gray-500 uppercase font-black">Final Charge</p>
-                  <p className="text-3xl font-black text-neonCyan italic">৳{((orderQuantity/1000) * (activeOrderService?.ratePer1000 || 0)).toFixed(2)}</p>
-                  <button onClick={handlePlaceOrder} className="w-full mt-6 py-4 bg-neonCyan text-charcoal font-black rounded-xl uppercase italic shadow-glow-cyan active:scale-95 transition-all">Place Order</button>
+                <div className="pt-8 md:pt-10 border-t border-white/5 mt-6">
+                  <p className="text-[9px] md:text-[10px] text-gray-500 uppercase font-black tracking-widest">Final Charge</p>
+                  <p className="text-2xl md:text-3xl font-black text-neonCyan italic">৳{((orderQuantity/1000) * (activeOrderService?.ratePer1000 || 0)).toFixed(2)}</p>
+                  <button onClick={handlePlaceOrder} className="w-full mt-4 md:mt-6 py-4 md:py-5 bg-neonCyan text-charcoal font-black rounded-xl uppercase italic shadow-glow-cyan active:scale-95 transition-all text-sm">Place Order</button>
                 </div>
               </div>
             </div>
@@ -791,52 +822,54 @@ const App: React.FC = () => {
       );
 
       case 'services': return (
-        <div className="space-y-8 animate-in fade-in duration-700">
-           <div className="glass-panel p-10 flex flex-wrap gap-4 items-center justify-between">
-              <h3 className="text-2xl font-black text-white italic uppercase tracking-tighter">Asset Hub</h3>
-              <div className="flex flex-wrap gap-2">
+        <div className="space-y-6 md:space-y-8 animate-in fade-in duration-700 pb-20 lg:pb-0">
+           <div className="glass-panel p-6 md:p-10 flex flex-col md:flex-row gap-6 md:gap-4 items-center justify-between">
+              <h3 className="text-xl md:text-2xl font-black text-white italic uppercase tracking-tighter">Asset Hub</h3>
+              <div className="flex flex-wrap gap-2 justify-center">
                  {categories.map(cat => (
-                   <button key={cat} onClick={() => setOrderCategory(cat)} className={`px-4 py-2 rounded-xl text-[10px] font-black uppercase transition-all ${orderCategory === cat ? 'bg-neonCyan text-charcoal' : 'bg-white/5 text-gray-500 hover:text-white'}`}>{cat}</button>
+                   <button key={cat} onClick={() => setOrderCategory(cat)} className={`px-3 md:px-4 py-2 rounded-xl text-[9px] md:text-[10px] font-black uppercase transition-all whitespace-nowrap ${orderCategory === cat ? 'bg-neonCyan text-charcoal' : 'bg-white/5 text-gray-500 hover:text-white'}`}>{cat}</button>
                  ))}
               </div>
            </div>
            <div className="glass-panel overflow-hidden border-white/5">
-              <table className="w-full text-left">
-                 <thead className="bg-white/5 text-[10px] uppercase font-black text-gray-500 tracking-widest">
-                    <tr><th className="px-8 py-6">Mission Asset</th><th className="px-8 py-6">Rate/1K</th><th className="px-8 py-6">Range</th><th className="px-8 py-6">Control</th></tr>
-                 </thead>
-                 <tbody className="divide-y divide-white/5">
-                    {globalServices.filter(s => orderCategory === 'All' || s.category === orderCategory).map(svc => (
-                       <tr key={svc.id} className="hover:bg-white/[0.02]">
-                          <td className="px-8 py-6"><p className="text-white font-black text-xs uppercase">{svc.name}</p></td>
-                          <td className="px-8 py-6 font-black text-neonCyan">৳{svc.ratePer1000}</td>
-                          <td className="px-8 py-6 text-[10px] font-mono opacity-50">{svc.min.toLocaleString()} - {svc.max.toLocaleString()}</td>
-                          <td className="px-8 py-6"><button onClick={() => { setOrderServiceId(svc.id); setOrderCategory(svc.category); setView('new-order'); }} className="px-6 py-2 bg-neonCyan/10 text-neonCyan border border-neonCyan/20 rounded-lg text-[10px] font-black uppercase italic hover:bg-neonCyan hover:text-charcoal transition-all">Order</button></td>
-                       </tr>
-                    ))}
-                 </tbody>
-              </table>
+              <div className="overflow-x-auto custom-scrollbar">
+                <table className="w-full text-left min-w-[600px]">
+                  <thead className="bg-white/5 text-[9px] md:text-[10px] uppercase font-black text-gray-500 tracking-widest">
+                      <tr><th className="px-6 md:px-8 py-5 md:py-6">Mission Asset</th><th className="px-6 md:px-8 py-5 md:py-6">Rate/1K</th><th className="px-6 md:px-8 py-5 md:py-6">Range</th><th className="px-6 md:px-8 py-5 md:py-6 text-right">Control</th></tr>
+                  </thead>
+                  <tbody className="divide-y divide-white/5">
+                      {globalServices.filter(s => orderCategory === 'All' || s.category === orderCategory).map(svc => (
+                        <tr key={svc.id} className="hover:bg-white/[0.02]">
+                            <td className="px-6 md:px-8 py-5 md:py-6"><p className="text-white font-black text-xs uppercase">{svc.name}</p></td>
+                            <td className="px-6 md:px-8 py-5 md:py-6 font-black text-neonCyan">৳{svc.ratePer1000}</td>
+                            <td className="px-6 md:px-8 py-5 md:py-6 text-[10px] font-mono opacity-50">{svc.min.toLocaleString()} - {svc.max.toLocaleString()}</td>
+                            <td className="px-6 md:px-8 py-5 md:py-6 text-right"><button onClick={() => { setOrderServiceId(svc.id); setOrderCategory(svc.category); setView('new-order'); }} className="px-4 md:px-6 py-2 bg-neonCyan/10 text-neonCyan border border-neonCyan/20 rounded-lg text-[10px] font-black uppercase italic hover:bg-neonCyan hover:text-charcoal transition-all">Order</button></td>
+                        </tr>
+                      ))}
+                  </tbody>
+                </table>
+              </div>
            </div>
         </div>
       );
 
       case 'orders': return (
-        <div className="glass-panel overflow-hidden border-white/5 animate-in fade-in duration-700">
-          <div className="p-10 border-b border-white/5 bg-white/[0.01]">
-            <h3 className="text-2xl font-black text-white italic uppercase">Mission Logs</h3>
+        <div className="glass-panel overflow-hidden border-white/5 animate-in fade-in duration-700 pb-20 lg:pb-0">
+          <div className="p-6 md:p-10 border-b border-white/5 bg-white/[0.01]">
+            <h3 className="text-xl md:text-2xl font-black text-white italic uppercase">Mission Logs</h3>
           </div>
-          <div className="overflow-x-auto">
-            <table className="w-full text-left">
-              <thead className="bg-white/5 text-[10px] uppercase font-black text-gray-500 tracking-widest">
-                <tr><th className="px-10 py-7">Asset Type</th><th className="px-10 py-7">Vol</th><th className="px-10 py-7">State</th><th className="px-10 py-7">Sync Time</th></tr>
+          <div className="overflow-x-auto custom-scrollbar">
+            <table className="w-full text-left min-w-[700px]">
+              <thead className="bg-white/5 text-[9px] md:text-[10px] uppercase font-black text-gray-500 tracking-widest">
+                <tr><th className="px-6 md:px-10 py-5 md:py-7">Asset Type</th><th className="px-6 md:px-10 py-5 md:py-7">Vol</th><th className="px-6 md:px-10 py-5 md:py-7">State</th><th className="px-6 md:px-10 py-5 md:py-7">Sync Time</th></tr>
               </thead>
               <tbody className="divide-y divide-white/5">
                 {globalOrders.filter(o => o.username === user?.username).map(order => (
                   <tr key={order.id} className="hover:bg-white/[0.02]">
-                    <td className="px-10 py-8 text-white font-black uppercase italic text-xs">{order.service_name}</td>
-                    <td className="px-10 py-8 text-neonCyan font-black">{order.quantity.toLocaleString()}</td>
-                    <td className="px-10 py-8"><span className={`px-4 py-2 rounded-xl text-[9px] font-black uppercase ${order.status === 'Completed' ? 'bg-green-500/10 text-green-500' : 'bg-blue-500/10 text-blue-500'}`}>{order.status}</span></td>
-                    <td className="px-10 py-8 text-[10px] font-mono opacity-50">{new Date(order.created_at).toLocaleString()}</td>
+                    <td className="px-6 md:px-10 py-6 md:py-8 text-white font-black uppercase italic text-xs">{order.service_name}</td>
+                    <td className="px-6 md:px-10 py-6 md:py-8 text-neonCyan font-black">৳{order.charge.toFixed(2)}</td>
+                    <td className="px-6 md:px-10 py-6 md:py-8"><span className={`px-4 py-1.5 rounded-xl text-[8px] md:text-[9px] font-black uppercase ${order.status === 'Completed' ? 'bg-green-500/10 text-green-500' : 'bg-blue-500/10 text-blue-500'}`}>{order.status}</span></td>
+                    <td className="px-6 md:px-10 py-6 md:py-8 text-[10px] font-mono opacity-50">{new Date(order.created_at).toLocaleString()}</td>
                   </tr>
                 ))}
               </tbody>
@@ -846,25 +879,25 @@ const App: React.FC = () => {
       );
 
       case 'add-funds': return (
-        <div className="max-w-5xl mx-auto space-y-12 animate-in fade-in duration-700">
-          <div className="text-center space-y-4">
-            <h2 className="text-4xl font-black text-white uppercase italic tracking-tighter">Establish Financial Node</h2>
-            <p className="text-gray-500 font-bold uppercase tracking-widest text-xs">Securely add credits to your account</p>
+        <div className="max-w-5xl mx-auto space-y-8 md:space-y-12 animate-in fade-in duration-700 pb-20 lg:pb-0">
+          <div className="text-center space-y-3 px-4">
+            <h2 className="text-3xl md:text-4xl font-black text-white uppercase italic tracking-tighter">Establish Financial Node</h2>
+            <p className="text-gray-500 font-bold uppercase tracking-widest text-[10px] md:text-xs">Securely add credits to your account</p>
           </div>
 
-           <div className="glass-panel p-10 border-white/5">
-              <h3 className="text-xl font-black text-white italic uppercase tracking-tighter mb-10 flex items-center">
+           <div className="glass-panel p-6 md:p-10 border-white/5">
+              <h3 className="text-lg md:text-xl font-black text-white italic uppercase tracking-tighter mb-8 md:mb-10 flex items-center">
                 <i className="fa-solid fa-layer-group text-neonCyan mr-4"></i>
-                Select Payment Method
+                Select Method
               </h3>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
                 {PAYMENT_METHODS.filter(m => m.type === 'local').map((method) => (
                   <button 
                     key={method.id} 
                     onClick={() => setSelectedMethodId(method.id)} 
-                    className={`relative group p-8 rounded-[2rem] border-2 transition-all overflow-hidden ${
+                    className={`relative group p-6 md:p-8 rounded-[1.5rem] md:rounded-[2rem] border-2 transition-all overflow-hidden text-left ${
                       selectedMethodId === method.id 
-                        ? 'border-neonCyan bg-neonCyan/5 shadow-[0_0_40px_rgba(0,245,255,0.15)] scale-[1.02]' 
+                        ? 'border-neonCyan bg-neonCyan/5 shadow-[0_0_40px_rgba(0,245,255,0.15)]' 
                         : 'border-white/5 bg-white/[0.02] hover:border-white/10'
                     }`}
                   >
@@ -873,60 +906,53 @@ const App: React.FC = () => {
                         <i className="fa-solid fa-check text-[10px] font-black"></i>
                       </div>
                     )}
-                    <i className={`fa-solid ${method.icon} text-5xl mb-6 transition-colors duration-300`} style={{ color: method.color }}></i>
-                    <p className="text-lg font-black uppercase text-white tracking-widest italic">{method.name}</p>
-                    <p className="text-[10px] text-gray-500 font-bold uppercase mt-1">Automatic Node Sync</p>
+                    <i className={`fa-solid ${method.icon} text-4xl md:text-5xl mb-4 md:mb-6 transition-colors duration-300`} style={{ color: method.color }}></i>
+                    <p className="text-base md:text-lg font-black uppercase text-white tracking-widest italic">{method.name}</p>
+                    <p className="text-[9px] text-gray-500 font-bold uppercase mt-1">Personal Account</p>
                   </button>
                 ))}
               </div>
            </div>
 
-           <div className="grid lg:grid-cols-2 gap-10">
-              <div className="glass-panel p-10 bg-charcoal/80 border-neonCyan/20 relative overflow-hidden group">
+           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-10">
+              <div className="glass-panel p-6 md:p-10 bg-charcoal/80 border-neonCyan/20 relative overflow-hidden group">
                 <div className="absolute top-0 left-0 w-full h-1 bg-neonCyan opacity-50 group-hover:opacity-100 transition-opacity"></div>
-                <h3 className="text-2xl font-black text-white uppercase italic mb-8 flex items-center">
+                <h3 className="text-xl md:text-2xl font-black text-white uppercase italic mb-6 md:mb-8 flex items-center">
                   <i className="fa-solid fa-circle-info text-neonCyan mr-4"></i>
                   Instructions
                 </h3>
-                <div className="space-y-6">
+                <div className="space-y-4 md:space-y-6">
                   <div className="flex items-start space-x-4">
-                    <div className="w-8 h-8 rounded-full bg-neonCyan/10 border border-neonCyan/30 flex items-center justify-center text-neonCyan font-black text-xs shrink-0 mt-1">1</div>
-                    <p className="text-sm font-bold text-gray-300 leading-relaxed">
-                      Copy the number <span className="text-neonCyan italic font-black text-lg ml-1 font-mono tracking-tighter">{activePaymentMethod.phone}</span> and go to your <span className="text-white font-black italic">{activePaymentMethod.name}</span> app.
+                    <div className="w-6 h-6 md:w-8 md:h-8 rounded-full bg-neonCyan/10 border border-neonCyan/30 flex items-center justify-center text-neonCyan font-black text-xs shrink-0 mt-0.5">1</div>
+                    <p className="text-[12px] md:text-sm font-bold text-gray-300 leading-relaxed">
+                      Copy: <span className="text-neonCyan italic font-black text-base md:text-lg ml-1 font-mono tracking-tighter">{activePaymentMethod.phone}</span>
                     </p>
                   </div>
                   <div className="flex items-start space-x-4">
-                    <div className="w-8 h-8 rounded-full bg-neonCyan/10 border border-neonCyan/30 flex items-center justify-center text-neonCyan font-black text-xs shrink-0 mt-1">2</div>
-                    <p className="text-sm font-bold text-gray-300">Use <span className="text-white font-black uppercase italic">Send Money</span> option.</p>
+                    <div className="w-6 h-6 md:w-8 md:h-8 rounded-full bg-neonCyan/10 border border-neonCyan/30 flex items-center justify-center text-neonCyan font-black text-xs shrink-0 mt-0.5">2</div>
+                    <p className="text-[12px] md:text-sm font-bold text-gray-300 uppercase">Use <span className="text-white font-black italic">Send Money</span>.</p>
                   </div>
                   <div className="flex items-start space-x-4">
-                    <div className="w-8 h-8 rounded-full bg-neonCyan/10 border border-neonCyan/30 flex items-center justify-center text-neonCyan font-black text-xs shrink-0 mt-1">3</div>
-                    <p className="text-sm font-bold text-gray-300">Enter Amount and your <span className="text-white font-black uppercase italic">Secret Pin</span>.</p>
-                  </div>
-                  <div className="flex items-start space-x-4">
-                    <div className="w-8 h-8 rounded-full bg-neonCyan/10 border border-neonCyan/30 flex items-center justify-center text-neonCyan font-black text-xs shrink-0 mt-1">4</div>
-                    <p className="text-sm font-bold text-gray-300Leading-relaxed">
-                      After successful payment, enter the <span className="text-neonCyan font-black italic">Transaction ID (TrxID)</span> and <span className="text-neonCyan font-black italic">Amount</span> below to verify.
-                    </p>
+                    <div className="w-6 h-6 md:w-8 md:h-8 rounded-full bg-neonCyan/10 border border-neonCyan/30 flex items-center justify-center text-neonCyan font-black text-xs shrink-0 mt-0.5">3</div>
+                    <p className="text-[12px] md:text-sm font-bold text-gray-300">Success? Get the <span className="text-neonCyan font-black italic">TrxID</span>.</p>
                   </div>
                 </div>
                 
-                <div className="mt-10 p-6 bg-neonCyan/5 rounded-2xl border border-neonCyan/10 text-center">
-                   <p className="text-[10px] text-gray-500 font-black uppercase tracking-widest mb-2">Target Node Identity</p>
-                   <p className="text-3xl font-black text-white font-mono tracking-widest italic">{activePaymentMethod.phone}</p>
+                <div className="mt-8 md:mt-10 p-4 md:p-6 bg-neonCyan/5 rounded-2xl border border-neonCyan/10 text-center">
+                   <p className="text-2xl md:text-3xl font-black text-white font-mono tracking-widest italic">{activePaymentMethod.phone}</p>
                    <button 
-                     onClick={() => { navigator.clipboard.writeText(activePaymentMethod.phone || ''); alert('Number stored in buffer.'); }} 
-                     className="mt-4 px-8 py-3 bg-neonCyan text-charcoal rounded-xl font-black text-xs uppercase shadow-[0_0_20px_rgba(0,245,255,0.4)] hover:scale-105 active:scale-95 transition-all"
+                     onClick={() => { navigator.clipboard.writeText(activePaymentMethod.phone || ''); alert('Number copied.'); }} 
+                     className="mt-4 w-full py-3 bg-neonCyan text-charcoal rounded-xl font-black text-xs uppercase shadow-[0_0_20px_rgba(0,245,255,0.4)] hover:scale-105 active:scale-95 transition-all"
                    >
                      COPY NUMBER
                    </button>
                 </div>
               </div>
 
-              <div className="glass-panel p-10 border-white/10 relative">
-                <h3 className="text-2xl font-black text-white uppercase italic mb-10 flex items-center">
+              <div className="glass-panel p-6 md:p-10 border-white/10 relative">
+                <h3 className="text-xl md:text-2xl font-black text-white uppercase italic mb-8 md:mb-10 flex items-center">
                   <i className="fa-solid fa-shield-check text-neonCyan mr-4"></i>
-                  Verification Form
+                  Verify
                 </h3>
                 <form onSubmit={async (e) => {
                   e.preventDefault();
@@ -937,34 +963,34 @@ const App: React.FC = () => {
                   try {
                     await supabase.from('payments').insert([{ method: activePaymentMethod.name, amount: paymentAmount, tx_id: transactionId, username: user.username, status: 'Pending' }]);
                     await sendPaymentNotification({ payment_method: activePaymentMethod.name, username: user.username, amount_taka: paymentAmount, transaction_id: transactionId });
-                    alert("Verification signal sent to master admin. Please wait for manual authorization.");
+                    alert("Submission received. Manual approval takes 5-30 mins.");
                     setView('funds-history');
                   } finally { setIsGlobalLoading(false); }
-                }} className="space-y-8">
+                }} className="space-y-6 md:space-y-8">
                   <div className="space-y-2">
-                    <label className="text-[10px] text-gray-500 font-black uppercase tracking-widest ml-1">Transaction ID (TrxID)</label>
+                    <label className="text-[9px] md:text-[10px] text-gray-500 font-black uppercase tracking-widest">Transaction ID (TrxID)</label>
                     <input 
                       type="text" 
                       required
-                      placeholder="e.g. BKW82910XJ" 
+                      placeholder="TrxID" 
                       value={transactionId} 
                       onChange={(e) => setTransactionId(e.target.value.toUpperCase())} 
-                      className="w-full bg-charcoal border border-white/10 rounded-[1.5rem] p-6 text-white font-black text-2xl outline-none focus:border-neonCyan focus:shadow-[0_0_20px_rgba(0,245,255,0.1)] transition-all placeholder:text-gray-800" 
+                      className="w-full bg-charcoal border border-white/10 rounded-[1rem] p-4 md:p-6 text-white font-black text-xl md:text-2xl outline-none focus:border-neonCyan transition-all" 
                     />
                   </div>
                   <div className="space-y-2">
-                    <label className="text-[10px] text-gray-500 font-black uppercase tracking-widest ml-1">Amount (BDT)</label>
+                    <label className="text-[9px] md:text-[10px] text-gray-500 font-black uppercase tracking-widest">Amount (BDT)</label>
                     <input 
                       type="number" 
                       required
                       placeholder="0.00" 
                       value={paymentAmount || ''} 
                       onChange={(e) => setPaymentAmount(Number(e.target.value))} 
-                      className="w-full bg-charcoal border border-white/10 rounded-[1.5rem] p-6 text-white font-black text-2xl outline-none focus:border-neonCyan focus:shadow-[0_0_20px_rgba(0,245,255,0.1)] transition-all placeholder:text-gray-800" 
+                      className="w-full bg-charcoal border border-white/10 rounded-[1rem] p-4 md:p-6 text-white font-black text-xl md:text-2xl outline-none focus:border-neonCyan transition-all" 
                     />
                   </div>
-                  <button type="submit" className="w-full bg-neonCyan text-charcoal font-black py-7 rounded-[2rem] uppercase italic shadow-[0_0_30px_rgba(0,245,255,0.5)] text-xl hover:scale-[1.02] active:scale-95 transition-all mt-4">
-                    Verify Payment Node
+                  <button type="submit" className="w-full bg-neonCyan text-charcoal font-black py-5 md:py-7 rounded-2xl md:rounded-[2rem] uppercase italic shadow-[0_0_30px_rgba(0,245,255,0.5)] text-lg md:text-xl active:scale-95 transition-all">
+                    Establish Payment
                   </button>
                 </form>
               </div>
@@ -973,22 +999,22 @@ const App: React.FC = () => {
       );
 
       case 'funds-history': return (
-        <div className="glass-panel overflow-hidden border-white/5 animate-in fade-in duration-700">
-          <div className="p-10 border-b border-white/5 bg-white/[0.01]">
-            <h3 className="text-2xl font-black text-white italic uppercase text-center">Finance Trace</h3>
+        <div className="glass-panel overflow-hidden border-white/5 animate-in fade-in duration-700 pb-20 lg:pb-0">
+          <div className="p-6 md:p-10 border-b border-white/5 bg-white/[0.01]">
+            <h3 className="text-xl md:text-2xl font-black text-white italic uppercase text-center">Finance Trace</h3>
           </div>
-          <div className="overflow-x-auto">
-            <table className="w-full text-left">
-              <thead className="bg-white/5 text-[10px] uppercase font-black text-gray-500 tracking-widest">
-                <tr><th className="px-10 py-7">Channel</th><th className="px-10 py-7">Volume</th><th className="px-10 py-7">State</th><th className="px-10 py-7">Date</th></tr>
+          <div className="overflow-x-auto custom-scrollbar">
+            <table className="w-full text-left min-w-[600px]">
+              <thead className="bg-white/5 text-[9px] md:text-[10px] uppercase font-black text-gray-500 tracking-widest">
+                <tr><th className="px-6 md:px-10 py-5 md:py-7">Channel</th><th className="px-6 md:px-10 py-5 md:py-7">Volume</th><th className="px-6 md:px-10 py-5 md:py-7">State</th><th className="px-6 md:px-10 py-5 md:py-7">Date</th></tr>
               </thead>
               <tbody className="divide-y divide-white/5">
                 {globalPayments.filter(p => p.username === user?.username).map(p => (
                   <tr key={p.id}>
-                    <td className="px-10 py-8 text-white font-bold uppercase text-xs">{p.method}</td>
-                    <td className="px-10 py-8 text-neonCyan font-black">৳{p.amount.toLocaleString()}</td>
-                    <td className="px-10 py-8"><span className={`px-3 py-1 rounded-full text-[9px] font-black uppercase ${p.status === 'Completed' ? 'bg-green-500/10 text-green-500' : 'bg-yellow-500/10 text-yellow-500'}`}>{p.status}</span></td>
-                    <td className="px-10 py-8 text-[10px] font-mono opacity-50">{new Date(p.created_at).toLocaleDateString()}</td>
+                    <td className="px-6 md:px-10 py-6 md:py-8 text-white font-bold uppercase text-xs">{p.method}</td>
+                    <td className="px-6 md:px-10 py-6 md:py-8 text-neonCyan font-black">৳{p.amount.toLocaleString()}</td>
+                    <td className="px-6 md:px-10 py-6 md:py-8"><span className={`px-3 py-1.5 rounded-full text-[8px] md:text-[9px] font-black uppercase ${p.status === 'Completed' ? 'bg-green-500/10 text-green-500' : 'bg-yellow-500/10 text-yellow-500'}`}>{p.status}</span></td>
+                    <td className="px-6 md:px-10 py-6 md:py-8 text-[10px] font-mono opacity-50">{new Date(p.created_at).toLocaleDateString()}</td>
                   </tr>
                 ))}
               </tbody>
@@ -998,44 +1024,43 @@ const App: React.FC = () => {
       );
 
       case 'refer-earn': return (
-        <div className="max-w-4xl mx-auto space-y-10 animate-in fade-in duration-700">
-          <div className="glass-panel p-20 flex flex-col items-center justify-center text-center space-y-8 relative overflow-hidden border-white/10">
+        <div className="max-w-4xl mx-auto space-y-10 animate-in fade-in duration-700 pb-20 lg:pb-0">
+          <div className="glass-panel p-10 md:p-20 flex flex-col items-center justify-center text-center space-y-6 md:space-y-8 relative overflow-hidden border-white/10">
             <div className="absolute top-0 left-0 w-full h-1 bg-neonCyan"></div>
-            <div className="w-32 h-32 rounded-full bg-neonCyan/5 border border-neonCyan/20 flex items-center justify-center animate-pulse">
-              <i className="fa-solid fa-hourglass-start text-5xl text-neonCyan"></i>
+            <div className="w-24 h-24 md:w-32 md:h-32 rounded-full bg-neonCyan/5 border border-neonCyan/20 flex items-center justify-center animate-pulse">
+              <i className="fa-solid fa-hourglass-start text-4xl md:text-5xl text-neonCyan"></i>
             </div>
             <div className="space-y-4">
-              <h3 className="text-5xl font-black text-white italic uppercase tracking-tighter">Coming Soon</h3>
-              <p className="text-gray-500 font-bold uppercase tracking-widest text-sm max-w-md mx-auto">
-                Our elite referral protocol is currently being optimized for maximum yield extraction. 
-                Get ready for the most powerful passive income node in the social hub.
+              <h3 className="text-3xl md:text-5xl font-black text-white italic uppercase tracking-tighter">Coming Soon</h3>
+              <p className="text-gray-500 font-bold uppercase tracking-widest text-xs md:text-sm max-w-md mx-auto">
+                Our elite referral protocol is currently being optimized for maximum yield extraction.
               </p>
             </div>
-            <div className="pt-8 flex flex-wrap justify-center gap-4">
-              <span className="px-4 py-2 bg-white/5 border border-white/10 rounded-full text-[10px] font-black uppercase tracking-widest text-neonCyan">Protocol: Optimization</span>
-              <span className="px-4 py-2 bg-white/5 border border-white/10 rounded-full text-[10px] font-black uppercase tracking-widest text-neonCyan">Status: Encrypting</span>
+            <div className="pt-4 md:pt-8 flex flex-wrap justify-center gap-3">
+              <span className="px-4 py-2 bg-white/5 border border-white/10 rounded-full text-[8px] md:text-[10px] font-black uppercase tracking-widest text-neonCyan">Optimization Active</span>
+              <span className="px-4 py-2 bg-white/5 border border-white/10 rounded-full text-[8px] md:text-[10px] font-black uppercase tracking-widest text-neonCyan">Status: Encrypting</span>
             </div>
           </div>
         </div>
       );
 
       case 'profile': return (
-        <div className="max-w-2xl mx-auto space-y-8 animate-in fade-in duration-700">
-          <div className="glass-panel p-10 border-white/5 text-center">
-            <div className="w-24 h-24 rounded-full bg-neonCyan/10 border-2 border-neonCyan/30 mx-auto flex items-center justify-center mb-6">
-               <i className="fa-solid fa-user-shield text-4xl text-neonCyan"></i>
+        <div className="max-w-2xl mx-auto space-y-8 animate-in fade-in duration-700 pb-20 lg:pb-0">
+          <div className="glass-panel p-6 md:p-10 border-white/5 text-center">
+            <div className="w-20 h-20 md:w-24 md:h-24 rounded-full bg-neonCyan/10 border-2 border-neonCyan/30 mx-auto flex items-center justify-center mb-6">
+               <i className="fa-solid fa-user-shield text-3xl md:text-4xl text-neonCyan"></i>
             </div>
-            <h2 className="text-3xl font-black text-white italic uppercase mb-2">{user?.username}</h2>
-            <p className="text-neonCyan font-mono uppercase text-[10px] tracking-widest mb-8">{user?.role} NODE ACTIVATED</p>
-            <div className="p-8 bg-white/5 rounded-3xl text-left space-y-6">
-               <div className="grid grid-cols-2 gap-6">
-                  <div className="p-5 bg-charcoal rounded-2xl border border-white/5">
-                    <p className="text-[9px] text-gray-600 uppercase font-black">Account Balance</p>
-                    <p className="text-xl font-black text-white italic">৳{user?.balance.toLocaleString()}</p>
+            <h2 className="text-2xl md:text-3xl font-black text-white italic uppercase mb-2">{user?.username}</h2>
+            <p className="text-neonCyan font-mono uppercase text-[9px] md:text-[10px] tracking-widest mb-8">{user?.role} NODE ACTIVATED</p>
+            <div className="p-4 md:p-8 bg-white/5 rounded-3xl text-left space-y-4 md:space-y-6">
+               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-6">
+                  <div className="p-4 md:p-5 bg-charcoal rounded-2xl border border-white/5">
+                    <p className="text-[8px] md:text-[9px] text-gray-600 uppercase font-black tracking-widest">Account Balance</p>
+                    <p className="text-lg md:text-xl font-black text-white italic">৳{user?.balance.toLocaleString()}</p>
                   </div>
-                  <div className="p-5 bg-charcoal rounded-2xl border border-white/5">
-                    <p className="text-[9px] text-gray-600 uppercase font-black">Network Capacity</p>
-                    <p className="text-xl font-black text-white italic">৳{user?.totalSpent.toLocaleString()}</p>
+                  <div className="p-4 md:p-5 bg-charcoal rounded-2xl border border-white/5">
+                    <p className="text-[8px] md:text-[9px] text-gray-600 uppercase font-black tracking-widest">Network Capacity</p>
+                    <p className="text-lg md:text-xl font-black text-white italic">৳{user?.totalSpent.toLocaleString()}</p>
                   </div>
                </div>
             </div>
@@ -1043,57 +1068,31 @@ const App: React.FC = () => {
         </div>
       );
 
-      case 'admin-broadcast': return (
-        <div className="max-w-4xl mx-auto animate-in fade-in duration-700">
-          <div className="glass-panel p-10 border-white/10 relative overflow-hidden">
-            <div className="absolute top-0 left-0 w-full h-1 bg-neonCyan"></div>
-            <h3 className="text-3xl font-black text-white italic uppercase mb-10"><i className="fa-solid fa-bullhorn text-neonCyan mr-4"></i> Create Image Broadcast</h3>
-            <form onSubmit={handleBroadcastSubmit} className="space-y-6">
-              <div className="grid md:grid-cols-2 gap-6">
-                <div className="space-y-4">
-                  <div className="space-y-2">
-                    <label className="text-[10px] text-gray-500 font-black uppercase">Notification Title</label>
-                    <input type="text" required value={broadcastForm.title} onChange={(e) => setBroadcastForm({...broadcastForm, title: e.target.value})} className="w-full bg-charcoal border border-white/10 rounded-xl p-4 text-white font-bold outline-none focus:border-neonCyan" placeholder="e.g., 20% Bonus Active!" />
-                  </div>
-                  <div className="space-y-2">
-                    <label className="text-[10px] text-gray-500 font-black uppercase">Broadcast Image URL</label>
-                    <input type="url" value={broadcastForm.image_url} onChange={(e) => setBroadcastForm({...broadcastForm, image_url: e.target.value})} className="w-full bg-charcoal border border-white/10 rounded-xl p-4 text-white font-bold outline-none focus:border-neonCyan" placeholder="https://example.com/banner.jpg" />
-                  </div>
-                  <div className="space-y-2">
-                    <label className="text-[10px] text-gray-500 font-black uppercase">Redirect Link (Call to Action)</label>
-                    <input type="url" value={broadcastForm.redirect_link} onChange={(e) => setBroadcastForm({...broadcastForm, redirect_link: e.target.value})} className="w-full bg-charcoal border border-white/10 rounded-xl p-4 text-white font-bold outline-none focus:border-neonCyan" placeholder="https://wa.me/..." />
-                  </div>
-                </div>
-                <div className="space-y-2">
-                  <label className="text-[10px] text-gray-500 font-black uppercase">Broadcast Message</label>
-                  <textarea required rows={8} value={broadcastForm.message} onChange={(e) => setBroadcastForm({...broadcastForm, message: e.target.value})} className="w-full bg-charcoal border border-white/10 rounded-xl p-4 text-white font-bold outline-none focus:border-neonCyan resize-none" placeholder="Write your announcement details here..."></textarea>
-                </div>
-              </div>
-              <button type="submit" className="w-full bg-neonCyan text-charcoal font-black py-6 rounded-2xl uppercase shadow-glow-cyan italic tracking-widest text-lg hover:scale-[1.01] transition-transform mt-4">Publish Elite Broadcast</button>
-            </form>
-          </div>
+      case 'admin-dashboard': return (
+        <div className="space-y-6 md:space-y-10 animate-in fade-in duration-1000">
+           {/* Admin Stats are covered by default dashboard case if user role is admin */}
         </div>
       );
-      
+
       case 'admin-orders': return (
         <div className="glass-panel overflow-hidden border-white/5 animate-in fade-in duration-700">
-          <div className="p-10 border-b border-white/5 flex justify-between items-center bg-white/[0.01]">
-            <h3 className="text-2xl font-black text-white italic uppercase">Order Manager</h3>
-            <button onClick={refreshAdminData} className="px-6 py-2 bg-neonCyan/10 text-neonCyan rounded-xl font-black text-[10px] uppercase italic">Refresh</button>
+          <div className="p-6 md:p-10 border-b border-white/5 flex flex-col sm:flex-row justify-between items-center gap-4 bg-white/[0.01]">
+            <h3 className="text-xl md:text-2xl font-black text-white italic uppercase">Order Manager</h3>
+            <button onClick={refreshAdminData} className="w-full sm:w-auto px-6 py-2 bg-neonCyan/10 text-neonCyan rounded-xl font-black text-[10px] uppercase italic border border-neonCyan/20">Refresh</button>
           </div>
-          <div className="overflow-x-auto">
-            <table className="w-full text-left">
-              <thead className="bg-white/5 text-[10px] uppercase font-black text-gray-500 tracking-widest">
-                <tr><th className="px-10 py-7">User</th><th className="px-10 py-7">Service</th><th className="px-10 py-7">Vol</th><th className="px-10 py-7">State</th></tr>
+          <div className="overflow-x-auto custom-scrollbar">
+            <table className="w-full text-left min-w-[800px]">
+              <thead className="bg-white/5 text-[9px] md:text-[10px] uppercase font-black text-gray-500 tracking-widest">
+                <tr><th className="px-6 md:px-10 py-5 md:py-7">User</th><th className="px-6 md:px-10 py-5 md:py-7">Service</th><th className="px-6 md:px-10 py-5 md:py-7">Vol</th><th className="px-6 md:px-10 py-5 md:py-7">State</th></tr>
               </thead>
               <tbody className="divide-y divide-white/5">
                 {globalOrders.map(order => (
-                  <tr key={order.id}>
-                    <td className="px-10 py-8 text-white font-bold uppercase text-xs">{order.username}</td>
-                    <td className="px-10 py-8 text-white font-black italic text-xs">{order.service_name}</td>
-                    <td className="px-10 py-8 text-neonCyan font-black">{order.quantity.toLocaleString()}</td>
-                    <td className="px-10 py-8">
-                      <select value={order.status} onChange={(e) => updateOrderStatus(order.id, e.target.value)} className="bg-charcoal border border-white/10 rounded-xl p-2 text-[10px] font-black text-white outline-none">
+                  <tr key={order.id} className="hover:bg-white/[0.02]">
+                    <td className="px-6 md:px-10 py-6 md:py-8 text-white font-bold uppercase text-xs">{order.username}</td>
+                    <td className="px-6 md:px-10 py-6 md:py-8 text-white font-black italic text-xs">{order.service_name}</td>
+                    <td className="px-6 md:px-10 py-6 md:py-8 text-neonCyan font-black">{order.quantity.toLocaleString()}</td>
+                    <td className="px-6 md:px-10 py-6 md:py-8">
+                      <select value={order.status} onChange={(e) => updateOrderStatus(order.id, e.target.value)} className="bg-charcoal border border-white/10 rounded-xl p-2 text-[10px] font-black text-white outline-none focus:border-neonCyan">
                         <option value="Pending">Pending</option>
                         <option value="Processing">Processing</option>
                         <option value="Completed">Completed</option>
@@ -1109,150 +1108,6 @@ const App: React.FC = () => {
           </div>
         </div>
       );
-
-      case 'admin-categories': return (
-        <div className="space-y-10 animate-in fade-in duration-700">
-          <div className="glass-panel p-10 border-white/10">
-             <h3 className="text-3xl font-black text-white italic uppercase mb-10">Category Hub</h3>
-             <div className="flex gap-4 mb-10">
-               <input type="text" placeholder="Category Name" value={newCatName} onChange={(e) => setNewCatName(e.target.value)} className="flex-1 bg-white/5 border border-white/10 rounded-2xl p-5 text-white font-bold outline-none" />
-               <button onClick={handleAddCategory} className="px-10 py-5 bg-neonCyan text-charcoal font-black rounded-2xl uppercase italic">Add</button>
-             </div>
-             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-               {globalCategories.map(cat => (
-                 <div key={cat.id} className="p-6 bg-white/5 border border-white/10 rounded-2xl flex justify-between items-center group">
-                   <span className="text-xs font-black text-white uppercase">{cat.name}</span>
-                   <button onClick={() => handleDeleteCategory(cat.id)} className="text-gray-500 hover:text-red-500"><i className="fa-solid fa-trash-can"></i></button>
-                 </div>
-               ))}
-             </div>
-          </div>
-        </div>
-      );
-
-      case 'admin-services': return (
-        <div className="space-y-10 animate-in fade-in duration-700">
-          <div className="glass-panel p-10 border-white/10">
-             <h3 className="text-3xl font-black text-white italic uppercase mb-10">API & Services</h3>
-             <div className="grid md:grid-cols-3 gap-6 mb-10 p-8 bg-white/5 rounded-3xl border border-white/5">
-                <input type="text" placeholder="Name" value={newSvc.name} onChange={(e) => setNewSvc({...newSvc, name: e.target.value})} className="bg-charcoal border border-white/10 rounded-xl p-4 text-white font-bold" />
-                <select value={newSvc.category} onChange={(e) => setNewSvc({...newSvc, category: e.target.value})} className="bg-charcoal border border-white/10 rounded-xl p-4 text-white font-bold">
-                  <option value="">Select Category</option>
-                  {globalCategories.map(c => <option key={c.id} value={c.name}>{c.name}</option>)}
-                </select>
-                <input type="number" placeholder="Rate/1K" value={newSvc.ratePer1000 || ''} onChange={(e) => setNewSvc({...newSvc, ratePer1000: Number(e.target.value)})} className="bg-charcoal border border-white/10 rounded-xl p-4 text-white font-bold" />
-                <input type="number" placeholder="Min" value={newSvc.min || ''} onChange={(e) => setNewSvc({...newSvc, min: Number(e.target.value)})} className="bg-charcoal border border-white/10 rounded-xl p-4 text-white font-bold" />
-                <input type="number" placeholder="Max" value={newSvc.max || ''} onChange={(e) => setNewSvc({...newSvc, max: Number(e.target.value)})} className="bg-charcoal border border-white/10 rounded-xl p-4 text-white font-bold" />
-                <button onClick={handleAddService} className="bg-neonCyan text-charcoal font-black rounded-xl uppercase h-14">Add Asset</button>
-             </div>
-             <div className="overflow-x-auto">
-                <table className="w-full text-left">
-                  <thead className="bg-white/5 text-[10px] uppercase font-black text-gray-500 tracking-widest">
-                    <tr><th className="px-8 py-6">Asset Name</th><th className="px-8 py-6">Category</th><th className="px-8 py-6">Rate</th><th className="px-8 py-6">Control</th></tr>
-                  </thead>
-                  <tbody className="divide-y divide-white/5">
-                    {globalServices.map(svc => (
-                       <tr key={svc.id}>
-                          <td className="px-8 py-6 font-black text-white text-xs uppercase">{svc.name}</td>
-                          <td className="px-8 py-6 text-gray-400 text-[10px] uppercase">{svc.category}</td>
-                          <td className="px-8 py-6 text-neonCyan font-black">৳{svc.ratePer1000}</td>
-                          <td className="px-8 py-6"><button onClick={() => handleDeleteService(svc.id)} className="text-gray-500 hover:text-red-500"><i className="fa-solid fa-trash-can"></i></button></td>
-                       </tr>
-                    ))}
-                  </tbody>
-                </table>
-             </div>
-          </div>
-        </div>
-      );
-
-      case 'admin-users': return (
-        <div className="glass-panel overflow-hidden border-white/5 animate-in fade-in duration-700">
-          <div className="p-10 border-b border-white/5 flex justify-between items-center bg-white/[0.01]">
-            <h3 className="text-2xl font-black text-white italic uppercase">User Directory</h3>
-          </div>
-          <div className="overflow-x-auto">
-            <table className="w-full text-left">
-              <thead className="bg-white/5 text-[10px] uppercase font-black text-gray-500 tracking-widest">
-                <tr><th className="px-10 py-7">Username</th><th className="px-10 py-7">Balance</th><th className="px-10 py-7">Spent</th><th className="px-10 py-7">Actions</th></tr>
-              </thead>
-              <tbody className="divide-y divide-white/5">
-                {globalUsers.map(u => (
-                  <tr key={u.id}>
-                    <td className="px-10 py-8"><p className="text-white font-black uppercase text-xs">{u.username}</p></td>
-                    <td className="px-10 py-8 text-neonCyan font-black">৳{Number(u.balance).toLocaleString()}</td>
-                    <td className="px-10 py-8 text-white font-black">৳{Number(u.total_spent).toLocaleString()}</td>
-                    <td className="px-10 py-8">
-                       <div className="flex gap-2">
-                          <button onClick={() => { const amt = prompt("Credit Amount:"); if(amt) updateUserBalance(u.username, Number(amt)); }} className="px-3 py-1 bg-green-500/10 text-green-500 rounded-lg text-[10px] font-black uppercase">Add</button>
-                          <button onClick={() => { const amt = prompt("Deduct Amount:"); if(amt) updateUserBalance(u.username, -Number(amt)); }} className="px-3 py-1 bg-red-500/10 text-red-500 rounded-lg text-[10px] font-black uppercase">Sub</button>
-                       </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
-      );
-
-      case 'admin-payments': return (
-        <div className="glass-panel overflow-hidden border-white/5 animate-in fade-in duration-700">
-          <div className="p-10 border-b border-white/5 flex justify-between items-center bg-white/[0.01]">
-            <h3 className="text-2xl font-black text-white italic uppercase">Finance Logs</h3>
-          </div>
-          <div className="overflow-x-auto">
-            <table className="w-full text-left">
-              <thead className="bg-white/5 text-[10px] uppercase font-black text-gray-500 tracking-widest">
-                <tr><th className="px-10 py-7">Agent</th><th className="px-10 py-7">Method</th><th className="px-10 py-7">Amount</th><th className="px-10 py-7">Status</th><th className="px-10 py-7">Action</th></tr>
-              </thead>
-              <tbody className="divide-y divide-white/5">
-                {globalPayments.map(p => (
-                  <tr key={p.id}>
-                    <td className="px-10 py-8 text-white font-bold uppercase text-xs">{p.username}</td>
-                    <td className="px-10 py-8 text-gray-400 text-xs">{p.method}</td>
-                    <td className="px-10 py-8 text-neonCyan font-black">৳{p.amount.toLocaleString()}</td>
-                    <td className="px-10 py-8"><span className={`px-3 py-1 rounded-lg text-[9px] font-black uppercase ${p.status === 'Completed' ? 'bg-green-500/10 text-green-500' : 'bg-yellow-500/10 text-yellow-500'}`}>{p.status}</span></td>
-                    <td className="px-10 py-8">
-                       {p.status === 'Pending' && (
-                         <button onClick={() => approvePayment(p)} className="px-6 py-2 bg-neonCyan text-charcoal rounded-xl font-black text-[10px] uppercase italic">Approve</button>
-                       )}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
-      );
-
-      case 'admin-settings': return (
-        <div className="max-w-4xl mx-auto space-y-10 animate-in fade-in duration-700">
-          <div className="glass-panel p-12 border-white/10">
-             <h3 className="text-3xl font-black text-white italic uppercase mb-12">System Config</h3>
-             <div className="grid md:grid-cols-2 gap-10">
-                <div className="space-y-4">
-                   <p className="text-[10px] text-gray-500 uppercase font-black">Referral System</p>
-                   <div className="flex items-center justify-between p-6 bg-white/5 border border-white/10 rounded-2xl">
-                      <span className="text-white font-bold uppercase text-xs">Enabled</span>
-                      <button onClick={() => { const val = !sysRefEnabled; setSysRefEnabled(val); supabase.from('system_config').upsert([{ key: 'ref_enabled', value: val.toString() }]); }} className={`w-14 h-8 rounded-full relative ${sysRefEnabled ? 'bg-neonCyan' : 'bg-gray-800'}`}>
-                         <div className={`absolute top-1 w-6 h-6 rounded-full bg-white transition-all ${sysRefEnabled ? 'left-7' : 'left-1'}`}></div>
-                      </button>
-                   </div>
-                </div>
-                <div className="space-y-4">
-                   <p className="text-[10px] text-gray-500 uppercase font-black">Yield (%)</p>
-                   <div className="flex gap-4">
-                      <input type="number" value={sysRefPercentage} onChange={(e) => setSysRefPercentage(Number(e.target.value))} className="flex-1 bg-charcoal border border-white/10 rounded-2xl p-6 text-white font-black" />
-                      <button onClick={() => { supabase.from('system_config').upsert([{ key: 'ref_percentage', value: sysRefPercentage.toString() }]); alert("Updated."); }} className="px-8 bg-neonCyan text-charcoal font-black rounded-2xl uppercase">Save</button>
-                   </div>
-                </div>
-             </div>
-          </div>
-        </div>
-      );
-
-      case 'architecture': return <ArchitectureView />;
 
       default: return <div className="p-32 text-center opacity-30 uppercase tracking-[0.6em] font-black italic">Synchronizing Node...</div>;
     }
@@ -1278,26 +1133,31 @@ const App: React.FC = () => {
       )}
       <main className={`flex-1 flex flex-col h-full overflow-hidden ${isAuthPage ? 'w-full' : ''}`}>
         {!isAuthPage && (
-          <header className="h-20 lg:h-24 flex items-center justify-between px-6 lg:px-12 border-b border-white/5 bg-charcoal/50 backdrop-blur-3xl z-40">
+          <header className="h-16 lg:h-24 flex items-center justify-between px-4 md:px-6 lg:px-12 border-b border-white/5 bg-charcoal/50 backdrop-blur-3xl z-40">
             <div className="flex items-center">
               <button onClick={() => setIsSidebarOpen(true)} className="lg:hidden w-10 h-10 mr-4 flex items-center justify-center bg-white/5 rounded-xl text-white border border-white/10">
                 <i className="fa-solid fa-bars-staggered"></i>
               </button>
-              <div className="hidden sm:flex items-center text-gray-600 text-[10px] font-black uppercase tracking-widest">
-                <span className={user?.role === 'admin' ? 'text-red-500' : 'text-neonCyan'}>{user?.role === 'admin' ? 'ROOT CONTROL' : 'OPERATIVE'}</span>
-                <i className="fa-solid fa-chevron-right text-[7px] mx-4 lg:mx-6"></i>
-                <span className="text-white">{currentView.replace('-', ' ')}</span>
+              <div className="flex items-center text-gray-600 text-[8px] md:text-[10px] font-black uppercase tracking-widest">
+                <span className={user?.role === 'admin' ? 'text-red-500' : 'text-neonCyan'}>{user?.role === 'admin' ? 'ROOT' : 'OP'}</span>
+                <i className="fa-solid fa-chevron-right text-[7px] mx-3 md:mx-4"></i>
+                <span className="text-white truncate max-w-[80px] md:max-w-none">{currentView.replace('-', ' ')}</span>
               </div>
             </div>
-            <div className="flex items-center space-x-3 lg:space-x-6">
-               <div className="px-4 lg:px-6 py-2 bg-white/5 border border-white/5 rounded-full text-[10px] lg:text-xs font-black uppercase tracking-widest text-neonCyan">৳ {user?.balance.toLocaleString()}</div>
-               <button onClick={async () => { await supabase.auth.signOut(); }} className="w-10 h-10 lg:w-12 lg:h-12 rounded-xl bg-white/5 text-gray-500 hover:text-red-500 border border-white/5 transition-all"><i className="fa-solid fa-power-off"></i></button>
+            <div className="flex items-center space-x-2 md:space-x-4">
+               <div className="px-3 md:px-6 py-1.5 md:py-2 bg-white/5 border border-white/5 rounded-full text-[9px] md:text-xs font-black uppercase tracking-widest text-neonCyan">৳ {user?.balance.toLocaleString()}</div>
+               <button onClick={async () => { await supabase.auth.signOut(); }} className="w-8 h-8 md:w-12 md:h-12 rounded-xl bg-white/5 text-gray-500 hover:text-red-500 border border-white/5 transition-all"><i className="fa-solid fa-power-off text-xs md:text-base"></i></button>
             </div>
           </header>
         )}
-        <section className={`flex-1 overflow-y-auto ${!isAuthPage ? 'p-6 lg:p-12' : ''} custom-scrollbar relative`}>{renderContent()}</section>
+        <section className={`flex-1 overflow-y-auto ${!isAuthPage ? 'p-4 md:p-6 lg:p-12' : ''} custom-scrollbar relative`}>{renderContent()}</section>
+        
+        {/* Only show bottom nav for users on mobile */}
+        {!isAuthPage && user?.role !== 'admin' && (
+          <BottomNav currentView={currentView} setView={setView} />
+        )}
       </main>
-      <a href="https://wa.me/8801408461902" className="fixed bottom-6 right-6 lg:bottom-12 lg:right-12 w-16 h-16 lg:w-20 lg:h-20 bg-[#25D366] text-white rounded-[2rem] flex items-center justify-center shadow-2xl whatsapp-btn-pulse z-[60] transition-transform hover:scale-110"><i className="fa-brands fa-whatsapp text-3xl lg:text-4xl"></i></a>
+      <a href="https://wa.me/8801408461902" className="fixed bottom-20 lg:bottom-12 right-6 lg:right-12 w-14 h-14 md:w-20 md:h-20 bg-[#25D366] text-white rounded-2xl md:rounded-[2rem] flex items-center justify-center shadow-2xl whatsapp-btn-pulse z-[60] transition-transform hover:scale-110"><i className="fa-brands fa-whatsapp text-2xl md:text-4xl"></i></a>
     </div>
   );
 };
