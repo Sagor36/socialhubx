@@ -1,0 +1,8 @@
+{
+  "name": "Social Hub X BD",
+  "description": "A high-performance, modern SMM Panel dashboard with glassmorphism UI, real-time tracking, and automated service management.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone"
+  ]
+}
