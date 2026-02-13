@@ -316,30 +316,35 @@ const App: React.FC = () => {
   }, []);
 
   const refreshAdminData = useCallback(async () => {
-    if (user?.role !== 'admin') return;
-    await Promise.all([
-      fetchGlobalServices(),
-      fetchGlobalCategories(),
-      fetchGlobalOrders(),
-      fetchGlobalPayments(),
-      fetchAllUsers()
-    ]);
+    if (!user || user.role !== 'admin') return;
+    setIsGlobalLoading(true);
+    try {
+      await Promise.all([
+        fetchGlobalServices(),
+        fetchGlobalCategories(),
+        fetchGlobalOrders(),
+        fetchGlobalPayments(),
+        fetchAllUsers()
+      ]);
 
-    const { count: userCount } = await supabase.from('profiles').select('*', { count: 'exact', head: true });
-    const { data: allOrders } = await supabase.from('orders').select('*');
-    const { count: pendingCount } = await supabase.from('payments').select('*', { count: 'exact', head: true }).eq('status', 'Pending');
-    const { data: completedPayments } = await supabase.from('payments').select('amount').eq('status', 'Completed');
-    
-    const revenue = completedPayments?.reduce((sum, p) => sum + (Number(p.amount) || 0), 0) || 0;
-    
-    setAdminMetrics(prev => ({
-      ...prev,
-      totalUsers: userCount || 0,
-      totalOrders: allOrders?.length || 0,
-      totalRevenue: revenue,
-      pendingSyncs: pendingCount || 0,
-      liveDeployments: allOrders?.filter(o => o.status === 'Processing' || o.status === 'Pending').length || 0,
-    }));
+      const { count: userCount } = await supabase.from('profiles').select('*', { count: 'exact', head: true });
+      const { data: allOrders } = await supabase.from('orders').select('*');
+      const { count: pendingCount } = await supabase.from('payments').select('*', { count: 'exact', head: true }).eq('status', 'Pending');
+      const { data: completedPayments } = await supabase.from('payments').select('amount').eq('status', 'Completed');
+      
+      const revenue = completedPayments?.reduce((sum, p) => sum + (Number(p.amount) || 0), 0) || 0;
+      
+      setAdminMetrics(prev => ({
+        ...prev,
+        totalUsers: userCount || 0,
+        totalOrders: allOrders?.length || 0,
+        totalRevenue: revenue,
+        pendingSyncs: pendingCount || 0,
+        liveDeployments: allOrders?.filter(o => o.status === 'Processing' || o.status === 'Pending').length || 0,
+      }));
+    } finally {
+      setIsGlobalLoading(false);
+    }
   }, [user, fetchGlobalServices, fetchGlobalCategories, fetchGlobalOrders, fetchGlobalPayments, fetchAllUsers]);
 
   const fetchReferralData = useCallback(async (userId: string) => {
@@ -1068,12 +1073,6 @@ const App: React.FC = () => {
         </div>
       );
 
-      case 'admin-dashboard': return (
-        <div className="space-y-6 md:space-y-10 animate-in fade-in duration-1000">
-           {/* Admin Stats are covered by default dashboard case if user role is admin */}
-        </div>
-      );
-
       case 'admin-orders': return (
         <div className="glass-panel overflow-hidden border-white/5 animate-in fade-in duration-700">
           <div className="p-6 md:p-10 border-b border-white/5 flex flex-col sm:flex-row justify-between items-center gap-4 bg-white/[0.01]">
@@ -1109,6 +1108,182 @@ const App: React.FC = () => {
         </div>
       );
 
+      case 'admin-broadcast': return (
+        <div className="max-w-4xl mx-auto animate-in fade-in duration-700 pb-20 lg:pb-0">
+          <div className="glass-panel p-6 md:p-10 border-white/10 relative overflow-hidden">
+            <div className="absolute top-0 left-0 w-full h-1 bg-neonCyan"></div>
+            <h3 className="text-2xl md:text-3xl font-black text-white italic uppercase mb-10"><i className="fa-solid fa-bullhorn text-neonCyan mr-4"></i> Broadcast Hub</h3>
+            <form onSubmit={handleBroadcastSubmit} className="space-y-6">
+              <div className="grid md:grid-cols-2 gap-6">
+                <div className="space-y-4">
+                  <div className="space-y-2">
+                    <label className="text-[10px] text-gray-500 font-black uppercase">Notification Title</label>
+                    <input type="text" required value={broadcastForm.title} onChange={(e) => setBroadcastForm({...broadcastForm, title: e.target.value})} className="w-full bg-charcoal border border-white/10 rounded-xl p-4 text-white font-bold outline-none focus:border-neonCyan" placeholder="e.g., 20% Bonus Active!" />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-[10px] text-gray-500 font-black uppercase">Broadcast Image URL</label>
+                    <input type="url" value={broadcastForm.image_url} onChange={(e) => setBroadcastForm({...broadcastForm, image_url: e.target.value})} className="w-full bg-charcoal border border-white/10 rounded-xl p-4 text-white font-bold outline-none focus:border-neonCyan" placeholder="https://example.com/banner.jpg" />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-[10px] text-gray-500 font-black uppercase">Redirect Link (Call to Action)</label>
+                    <input type="url" value={broadcastForm.redirect_link} onChange={(e) => setBroadcastForm({...broadcastForm, redirect_link: e.target.value})} className="w-full bg-charcoal border border-white/10 rounded-xl p-4 text-white font-bold outline-none focus:border-neonCyan" placeholder="https://wa.me/..." />
+                  </div>
+                </div>
+                <div className="space-y-2">
+                  <label className="text-[10px] text-gray-500 font-black uppercase">Broadcast Message</label>
+                  <textarea required rows={8} value={broadcastForm.message} onChange={(e) => setBroadcastForm({...broadcastForm, message: e.target.value})} className="w-full bg-charcoal border border-white/10 rounded-xl p-4 text-white font-bold outline-none focus:border-neonCyan resize-none" placeholder="Write your announcement details here..."></textarea>
+                </div>
+              </div>
+              <button type="submit" className="w-full bg-neonCyan text-charcoal font-black py-6 rounded-2xl uppercase shadow-glow-cyan italic tracking-widest text-lg hover:scale-[1.01] transition-transform mt-4">Publish Broadcast</button>
+            </form>
+          </div>
+        </div>
+      );
+
+      case 'admin-categories': return (
+        <div className="space-y-10 animate-in fade-in duration-700 pb-20 lg:pb-0">
+          <div className="glass-panel p-6 md:p-10 border-white/10">
+             <h3 className="text-2xl md:text-3xl font-black text-white italic uppercase mb-10">Category Hub</h3>
+             <div className="flex flex-col sm:flex-row gap-4 mb-10">
+               <input type="text" placeholder="Category Name" value={newCatName} onChange={(e) => setNewCatName(e.target.value)} className="flex-1 bg-white/5 border border-white/10 rounded-2xl p-5 text-white font-bold outline-none focus:border-neonCyan" />
+               <button onClick={handleAddCategory} className="px-10 py-5 bg-neonCyan text-charcoal font-black rounded-2xl uppercase italic shadow-glow-cyan">Add Category</button>
+             </div>
+             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+               {globalCategories.map(cat => (
+                 <div key={cat.id} className="p-6 bg-white/5 border border-white/10 rounded-2xl flex justify-between items-center group">
+                   <span className="text-xs font-black text-white uppercase tracking-widest">{cat.name}</span>
+                   <button onClick={() => handleDeleteCategory(cat.id)} className="text-gray-500 hover:text-red-500 transition-colors"><i className="fa-solid fa-trash-can"></i></button>
+                 </div>
+               ))}
+             </div>
+          </div>
+        </div>
+      );
+
+      case 'admin-services': return (
+        <div className="space-y-10 animate-in fade-in duration-700 pb-20 lg:pb-0">
+          <div className="glass-panel p-6 md:p-10 border-white/10">
+             <h3 className="text-2xl md:text-3xl font-black text-white italic uppercase mb-10">API & Services</h3>
+             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-10 p-6 md:p-8 bg-white/5 rounded-3xl border border-white/5">
+                <input type="text" placeholder="Name" value={newSvc.name} onChange={(e) => setNewSvc({...newSvc, name: e.target.value})} className="bg-charcoal border border-white/10 rounded-xl p-4 text-white font-bold outline-none focus:border-neonCyan" />
+                <select value={newSvc.category} onChange={(e) => setNewSvc({...newSvc, category: e.target.value})} className="bg-charcoal border border-white/10 rounded-xl p-4 text-white font-bold outline-none focus:border-neonCyan">
+                  <option value="">Select Category</option>
+                  {globalCategories.map(c => <option key={c.id} value={c.name}>{c.name}</option>)}
+                </select>
+                <input type="number" placeholder="Rate/1K" value={newSvc.ratePer1000 || ''} onChange={(e) => setNewSvc({...newSvc, ratePer1000: Number(e.target.value)})} className="bg-charcoal border border-white/10 rounded-xl p-4 text-white font-bold outline-none focus:border-neonCyan" />
+                <input type="number" placeholder="Min" value={newSvc.min || ''} onChange={(e) => setNewSvc({...newSvc, min: Number(e.target.value)})} className="bg-charcoal border border-white/10 rounded-xl p-4 text-white font-bold outline-none focus:border-neonCyan" />
+                <input type="number" placeholder="Max" value={newSvc.max || ''} onChange={(e) => setNewSvc({...newSvc, max: Number(e.target.value)})} className="bg-charcoal border border-white/10 rounded-xl p-4 text-white font-bold outline-none focus:border-neonCyan" />
+                <button onClick={handleAddService} className="bg-neonCyan text-charcoal font-black rounded-xl uppercase h-14 italic tracking-widest shadow-glow-cyan">Add Asset</button>
+             </div>
+             <div className="overflow-x-auto custom-scrollbar">
+                <table className="w-full text-left min-w-[700px]">
+                  <thead className="bg-white/5 text-[10px] uppercase font-black text-gray-500 tracking-widest">
+                    <tr><th className="px-8 py-6">Asset Name</th><th className="px-8 py-6">Category</th><th className="px-8 py-6">Rate</th><th className="px-8 py-6 text-right">Control</th></tr>
+                  </thead>
+                  <tbody className="divide-y divide-white/5">
+                    {globalServices.map(svc => (
+                       <tr key={svc.id} className="hover:bg-white/[0.02]">
+                          <td className="px-8 py-6 font-black text-white text-xs uppercase">{svc.name}</td>
+                          <td className="px-8 py-6 text-gray-400 text-[10px] uppercase">{svc.category}</td>
+                          <td className="px-8 py-6 text-neonCyan font-black">৳{svc.ratePer1000}</td>
+                          <td className="px-8 py-6 text-right"><button onClick={() => handleDeleteService(svc.id)} className="text-gray-500 hover:text-red-500 transition-colors"><i className="fa-solid fa-trash-can"></i></button></td>
+                       </tr>
+                    ))}
+                  </tbody>
+                </table>
+             </div>
+          </div>
+        </div>
+      );
+
+      case 'admin-users': return (
+        <div className="glass-panel overflow-hidden border-white/5 animate-in fade-in duration-700 pb-20 lg:pb-0">
+          <div className="p-6 md:p-10 border-b border-white/5 flex justify-between items-center bg-white/[0.01]">
+            <h3 className="text-xl md:text-2xl font-black text-white italic uppercase">User Directory</h3>
+          </div>
+          <div className="overflow-x-auto custom-scrollbar">
+            <table className="w-full text-left min-w-[600px]">
+              <thead className="bg-white/5 text-[10px] uppercase font-black text-gray-500 tracking-widest">
+                <tr><th className="px-10 py-7">Username</th><th className="px-10 py-7">Balance</th><th className="px-10 py-7">Spent</th><th className="px-10 py-7 text-right">Actions</th></tr>
+              </thead>
+              <tbody className="divide-y divide-white/5">
+                {globalUsers.map(u => (
+                  <tr key={u.id} className="hover:bg-white/[0.02]">
+                    <td className="px-10 py-8"><p className="text-white font-black uppercase text-xs">{u.username}</p></td>
+                    <td className="px-10 py-8 text-neonCyan font-black">৳{Number(u.balance).toLocaleString()}</td>
+                    <td className="px-10 py-8 text-white font-black">৳{Number(u.total_spent).toLocaleString()}</td>
+                    <td className="px-10 py-8 text-right">
+                       <div className="flex gap-2 justify-end">
+                          <button onClick={() => { const amt = prompt("Credit Amount:"); if(amt) updateUserBalance(u.username, Number(amt)); }} className="px-4 py-2 bg-green-500/10 text-green-500 rounded-lg text-[10px] font-black uppercase border border-green-500/20">Add</button>
+                          <button onClick={() => { const amt = prompt("Deduct Amount:"); if(amt) updateUserBalance(u.username, -Number(amt)); }} className="px-4 py-2 bg-red-500/10 text-red-500 rounded-lg text-[10px] font-black uppercase border border-red-500/20">Sub</button>
+                       </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      );
+
+      case 'admin-payments': return (
+        <div className="glass-panel overflow-hidden border-white/5 animate-in fade-in duration-700 pb-20 lg:pb-0">
+          <div className="p-6 md:p-10 border-b border-white/5 flex justify-between items-center bg-white/[0.01]">
+            <h3 className="text-xl md:text-2xl font-black text-white italic uppercase">Finance Logs</h3>
+          </div>
+          <div className="overflow-x-auto custom-scrollbar">
+            <table className="w-full text-left min-w-[800px]">
+              <thead className="bg-white/5 text-[10px] uppercase font-black text-gray-500 tracking-widest">
+                <tr><th className="px-10 py-7">Agent</th><th className="px-10 py-7">Method</th><th className="px-10 py-7">Amount</th><th className="px-10 py-7">Status</th><th className="px-10 py-7 text-right">Action</th></tr>
+              </thead>
+              <tbody className="divide-y divide-white/5">
+                {globalPayments.map(p => (
+                  <tr key={p.id} className="hover:bg-white/[0.02]">
+                    <td className="px-10 py-8 text-white font-bold uppercase text-xs">{p.username}</td>
+                    <td className="px-10 py-8 text-gray-400 text-xs">{p.method}</td>
+                    <td className="px-10 py-8 text-neonCyan font-black">৳{p.amount.toLocaleString()}</td>
+                    <td className="px-10 py-8"><span className={`px-3 py-1.5 rounded-lg text-[9px] font-black uppercase ${p.status === 'Completed' ? 'bg-green-500/10 text-green-500' : 'bg-yellow-500/10 text-yellow-500'}`}>{p.status}</span></td>
+                    <td className="px-10 py-8 text-right">
+                       {p.status === 'Pending' && (
+                         <button onClick={() => approvePayment(p)} className="px-6 py-2 bg-neonCyan text-charcoal rounded-xl font-black text-[10px] uppercase italic shadow-glow-cyan">Approve</button>
+                       )}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      );
+
+      case 'admin-settings': return (
+        <div className="max-w-4xl mx-auto space-y-10 animate-in fade-in duration-700 pb-20 lg:pb-0">
+          <div className="glass-panel p-6 md:p-12 border-white/10">
+             <h3 className="text-2xl md:text-3xl font-black text-white italic uppercase mb-12">System Config</h3>
+             <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+                <div className="space-y-4">
+                   <p className="text-[10px] text-gray-500 uppercase font-black tracking-widest ml-1">Referral System</p>
+                   <div className="flex items-center justify-between p-6 bg-white/5 border border-white/10 rounded-2xl">
+                      <span className="text-white font-bold uppercase text-xs">Enabled Protocol</span>
+                      <button onClick={() => { const val = !sysRefEnabled; setSysRefEnabled(val); supabase.from('system_config').upsert([{ key: 'ref_enabled', value: val.toString() }]); }} className={`w-14 h-8 rounded-full relative transition-colors duration-300 ${sysRefEnabled ? 'bg-neonCyan' : 'bg-gray-800'}`}>
+                         <div className={`absolute top-1 w-6 h-6 rounded-full bg-white transition-all duration-300 ${sysRefEnabled ? 'left-7' : 'left-1'}`}></div>
+                      </button>
+                   </div>
+                </div>
+                <div className="space-y-4">
+                   <p className="text-[10px] text-gray-500 uppercase font-black tracking-widest ml-1">Yield Extraction (%)</p>
+                   <div className="flex gap-4">
+                      <input type="number" value={sysRefPercentage} onChange={(e) => setSysRefPercentage(Number(e.target.value))} className="flex-1 bg-charcoal border border-white/10 rounded-2xl p-6 text-white font-black outline-none focus:border-neonCyan" />
+                      <button onClick={() => { supabase.from('system_config').upsert([{ key: 'ref_percentage', value: sysRefPercentage.toString() }]); alert("Protocol Updated."); }} className="px-8 bg-neonCyan text-charcoal font-black rounded-2xl uppercase italic tracking-widest shadow-glow-cyan">Save</button>
+                   </div>
+                </div>
+             </div>
+          </div>
+        </div>
+      );
+
+      case 'architecture': return <ArchitectureView />;
+
       default: return <div className="p-32 text-center opacity-30 uppercase tracking-[0.6em] font-black italic">Synchronizing Node...</div>;
     }
   };
@@ -1141,7 +1316,7 @@ const App: React.FC = () => {
               <div className="flex items-center text-gray-600 text-[8px] md:text-[10px] font-black uppercase tracking-widest">
                 <span className={user?.role === 'admin' ? 'text-red-500' : 'text-neonCyan'}>{user?.role === 'admin' ? 'ROOT' : 'OP'}</span>
                 <i className="fa-solid fa-chevron-right text-[7px] mx-3 md:mx-4"></i>
-                <span className="text-white truncate max-w-[80px] md:max-w-none">{currentView.replace('-', ' ')}</span>
+                <span className="text-white truncate max-w-[80px] md:max-w-none uppercase">{currentView.replace('admin-', '').replace('-', ' ')}</span>
               </div>
             </div>
             <div className="flex items-center space-x-2 md:space-x-4">
@@ -1152,7 +1327,6 @@ const App: React.FC = () => {
         )}
         <section className={`flex-1 overflow-y-auto ${!isAuthPage ? 'p-4 md:p-6 lg:p-12' : ''} custom-scrollbar relative`}>{renderContent()}</section>
         
-        {/* Only show bottom nav for users on mobile */}
         {!isAuthPage && user?.role !== 'admin' && (
           <BottomNav currentView={currentView} setView={setView} />
         )}
